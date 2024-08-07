@@ -1,0 +1,233 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      8195,        225]
+NotebookOptionsPosition[      7532,        206]
+NotebookOutlinePosition[      7931,        222]
+CellTagsIndexPosition[      7888,        219]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"Clear", "[", 
+  RowBox[{"allSums", ",", "successProbability", ",", "factorial"}], 
+  "]"}]], "Input",
+ CellLabel->"In[1]:=",ExpressionUUID->"36795139-3099-42e5-af4d-f7ce7cd5479a"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "Helper", " ", "function", " ", "to", " ", "generate", " ", "all", " ", 
+    "possible", " ", "sums"}], "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"allSums", "[", 
+      RowBox[{"total_", ",", "summands_", ",", "maxSummand_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", "result", "}"}], ",", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"!", 
+           RowBox[{"(", 
+            RowBox[{"0", "<=", "total", "<=", 
+             RowBox[{"maxSummand", "*", "summands"}]}], ")"}]}], ",", 
+          RowBox[{"Return", "[", 
+           RowBox[{"{", "}"}], "]"}]}], "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"total", "==", "0"}], ",", 
+          RowBox[{"Return", "[", 
+           RowBox[{"{", 
+            RowBox[{"ConstantArray", "[", 
+             RowBox[{"0", ",", "summands"}], "]"}], "}"}], "]"}]}], "]"}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"result", "=", 
+         RowBox[{"Join", "[", 
+          RowBox[{
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"maxSummand", ">", "0"}], "&&", 
+              RowBox[{"summands", ">", "0"}]}], ",", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Prepend", "[", 
+                RowBox[{"#", ",", "maxSummand"}], "]"}], "&"}], "/@", 
+              RowBox[{"allSums", "[", 
+               RowBox[{
+                RowBox[{"total", "-", "maxSummand"}], ",", 
+                RowBox[{"summands", "-", "1"}], ",", "maxSummand"}], "]"}]}], 
+             ",", 
+             RowBox[{"{", "}"}]}], "]"}], ",", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{"maxSummand", ">", "0"}], ",", 
+             RowBox[{"allSums", "[", 
+              RowBox[{"total", ",", "summands", ",", 
+               RowBox[{"maxSummand", "-", "1"}]}], "]"}], ",", 
+             RowBox[{"{", "}"}]}], "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Return", "[", "result", "]"}], ";"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Helper", " ", "function", " ", "to", " ", "compute", " ", "factorials"}],
+     "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"factorial", "[", "n_", "]"}], ":=", 
+    RowBox[{"Factorial", "[", "n", "]"}]}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Main", " ", "function", " ", "to", " ", "compute", " ", "success", " ", 
+     "probability"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"successProbability", "[", 
+      RowBox[{"n_", ",", "d_"}], "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"factorials", ",", 
+         RowBox[{"result", "=", "0"}], ",", "numberOfCases", ",", "histogram",
+          ",", "sList"}], "}"}], ",", 
+       RowBox[{"(*", 
+        RowBox[{"Precompute", " ", "factorials"}], "*)"}], 
+       RowBox[{
+        RowBox[{"factorials", "=", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"factorial", "[", "k", "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"k", ",", "0", ",", 
+             RowBox[{"Max", "[", 
+              RowBox[{"n", ",", "d"}], "]"}]}], "}"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+         "Iterate", " ", "over", " ", "all", " ", "possible", " ", "sums"}], 
+         "*)"}], 
+        RowBox[{"sList", "=", 
+         RowBox[{"allSums", "[", 
+          RowBox[{"n", ",", "d", ",", "n"}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Do", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"numberOfCases", "=", 
+            RowBox[{
+             RowBox[{"factorials", "[", 
+              RowBox[{"[", 
+               RowBox[{"n", "+", "1"}], "]"}], "]"}], "*", 
+             RowBox[{"factorials", "[", 
+              RowBox[{"[", 
+               RowBox[{"d", "+", "1"}], "]"}], "]"}]}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"histogram", "=", 
+            RowBox[{"ConstantArray", "[", 
+             RowBox[{"0", ",", 
+              RowBox[{"n", "+", "1"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+           
+           RowBox[{"Do", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"numberOfCases", "/=", 
+               RowBox[{"factorials", "[", 
+                RowBox[{"[", 
+                 RowBox[{"s", "+", "1"}], "]"}], "]"}]}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"histogram", "[", 
+                RowBox[{"[", 
+                 RowBox[{"s", "+", "1"}], "]"}], "]"}], "++"}], ";"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"s", ",", "sTuple"}], "}"}]}], "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"Do", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"numberOfCases", "/=", 
+               RowBox[{"factorials", "[", 
+                RowBox[{"[", 
+                 RowBox[{"count", "+", "1"}], "]"}], "]"}]}], ";"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"count", ",", "histogram"}], "}"}]}], "]"}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"result", "+=", 
+            RowBox[{
+             RowBox[{"sTuple", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], "*", "numberOfCases"}]}], ";"}],
+           ",", 
+          RowBox[{"{", 
+           RowBox[{"sTuple", ",", "sList"}], "}"}]}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"N", "[", 
+         RowBox[{"result", "/", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"d", "^", "n"}], "*", "n"}], ")"}]}], "]"}]}]}], "]"}]}], 
+    ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.9252012265938683`*^9, 3.925201226594364*^9}, {
+  3.92520167418016*^9, 3.925201674966086*^9}, {3.932020485102765*^9, 
+  3.932020493358664*^9}},
+ CellLabel->"In[2]:=",ExpressionUUID->"17bfcc3d-474b-4531-a370-6c2a479f72fe"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Print", "[", 
+  RowBox[{"successProbability", "[", 
+   RowBox[{"100", ",", "4"}], "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.925201261838786*^9, 3.9252012758760633`*^9}, {
+   3.925201308198778*^9, 3.925201328929386*^9}, {3.9252016870270967`*^9, 
+   3.925201698070278*^9}, 3.925201874199321*^9},
+ CellLabel->"In[5]:=",ExpressionUUID->"0f272e3a-5511-46ed-8c03-155e89e2aeba"],
+
+Cell[BoxData["0.30232631338887156`"], "Print",
+ CellChangeTimes->{3.925201876807267*^9, 3.932020509778407*^9},
+ CellLabel->
+  "During evaluation of \
+In[5]:=",ExpressionUUID->"1ce7015e-f9be-42b6-80ab-3aa983bb2611"]
+}, Open  ]]
+},
+WindowSize->{606., 665.25},
+WindowMargins->{{370.5, Automatic}, {0, Automatic}},
+FrontEndVersion->"13.2 for Linux x86 (64-bit) (January 30, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"eb65a028-b5a2-43fc-9990-4329804a652b"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 203, 4, 29, "Input",ExpressionUUID->"36795139-3099-42e5-af4d-f7ce7cd5479a"],
+Cell[764, 26, 6111, 160, 615, "Input",ExpressionUUID->"17bfcc3d-474b-4531-a370-6c2a479f72fe"],
+Cell[CellGroupData[{
+Cell[6900, 190, 399, 7, 29, "Input",ExpressionUUID->"0f272e3a-5511-46ed-8c03-155e89e2aeba"],
+Cell[7302, 199, 214, 4, 23, "Print",ExpressionUUID->"1ce7015e-f9be-42b6-80ab-3aa983bb2611"]
+}, Open  ]]
+}
+]
+*)
+
